@@ -2,47 +2,50 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    protected $table = 'usuarios';
+    protected $primaryKey = 'id_usuario';
+    public $timestamps = true;
+
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'id_empleado',
+        'nomape_usuario',
+        'username_usuario',
+        'mail_usuario',
+        'password_hash',
+        'rol_usuario',
+        'requiere_cambio_password',
+        'estado_usuario',
+        'ultimo_login',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
-        'password',
+        'password_hash',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected $casts = [
+        'requiere_cambio_password' => 'boolean',
+        'estado_usuario' => 'boolean',
+        'ultimo_login' => 'datetime',
+    ];
+
+    // Relaciones
+    public function articulos()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasMany(Product::class, 'id_usuario', 'id_usuario');
+    }
+
+    public function ordenesCreadas()
+    {
+        return $this->hasMany(Order::class, 'creado_por', 'id_usuario');
     }
 }

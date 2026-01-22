@@ -34,5 +34,16 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'deltron' => [
+    'base_url' => env('DELTRON_API_URL'),
+    'user'     => env('DELTRON_API_USER'),
+    'password' => env('DELTRON_API_PASSWORD'),
+],
+
+'deltron' => [
+    'mode' => env('DELTRON_MODE', 'mock'),
+    'base_url' => env('DELTRON_API_URL'),
+],
+    
 
 ];
